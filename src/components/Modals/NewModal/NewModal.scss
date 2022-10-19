@@ -1,0 +1,56 @@
+@import "../../../styles/app.scss";
+
+.modal__wrap--new {
+  input {
+    margin-left: $check_w-h;
+    margin-bottom: 5px;
+    background-color: transparent;
+    width: 70%;
+    border: none;
+    height: 20px;
+    font-size: 16px;
+    
+  }
+  animation: appear 0.1s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: $padding-all;
+  background-color: $g_grey--bg-hover;
+  .modal__task {
+    display: flex;
+
+    @include svg--grey;
+  }
+  .modal__details {
+    margin-left: 20px;
+  }
+  .modal__details {
+    display: flex;
+    flex-direction: column;
+    input[type="datetime-local"] {
+      &::-webkit-datetime-edit-text,&::-webkit-datetime-edit-month-field,
+      &::-webkit-datetime-edit-day-field,
+      &::-webkit-datetime-edit-year-field, &::-webkit-datetime-edit-hour-field, &::-webkit-datetime-edit-minute-field{
+        font-family: inherit;
+        color: $g_grey
+      }
+      
+
+    }
+  }
+  .modal__date-time {
+    display: flex;
+
+    justify-content: space-between;
+  }
+}
+
+@keyframes appear {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

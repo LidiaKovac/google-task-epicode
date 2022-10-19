@@ -1,0 +1,13 @@
+@import "./sizes", "./colors";
+@mixin svg--grey {
+    svg {
+
+        width: $check_w-h;
+        height: $check_w-h;
+        color: $g_grey;
+        &.fill {
+            color: $g_blue;
+            fill: $g_blue
+        }
+    }
+}

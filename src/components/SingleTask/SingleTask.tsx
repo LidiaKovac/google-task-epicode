@@ -1,25 +1,28 @@
 import "./SingleTask.scss"
-import { AiOutlineCheck } from "react-icons/ai"
-export const Single = () => {
+import { AiOutlineLink } from "react-icons/ai"
+import { Check } from "../Check/Check"
+import { FC } from "react"
+interface ISingleTask {
+    task: Task
+}
+export const Single: FC<ISingleTask> = ({ task }) => {
     return (
         <div className="single__wrap">
             <div className="single__main">
 
-                <div className="single__check">
-                    <AiOutlineCheck />
-                </div>
+                <Check />
                 <div className="single__task-text">
-                    EXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLEEXAMPLE
+                    {task.text}
                 </div>
             </div>
-            <div className="task__link">
-                <a href="">
-                    Click me to go to an attachment
+            {task.attachment?.length! > 0 && <div className="task__link">
+                <a href={task.attachment}>
+                    <AiOutlineLink /> Click me to go to an attachment
                 </a>
-            </div>
-            <div className="task__duetime">
-                17:00
-            </div>
+            </div>}
+            {task.due && <div className="task__duetime">
+                {task.due?.toString()}
+            </div>}
         </div>
 
     )

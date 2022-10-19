@@ -4,8 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin: 20px;
-  padding: 20px;
+  padding: $padding-all;
   gap: 10px;
   &:hover {
     background-color: $g_grey--bg-hover;
@@ -22,31 +21,7 @@
       text-overflow: ellipsis;
       width: calc(100% - calc($check_w-h + 20px));
     }
-    .single__check {
-      width: $check_w-h;
-      height: $check_w-h;
-      border-radius: $check_w-h;
-      border: 1px solid $g_grey;
 
-      @include center-all;
-
-      svg {
-        opacity: 0;
-        color: $g_blue;
-      }
-      &:hover {
-        // transition: 0.1;
-        transform: scale(1.4);
-        border: 1px solid transparent;
-        background-color: $g_grey--border-light;
-
-        svg {
-          width: calc($check_w-h - 3px);
-          height: calc($check_w-h - 3px);
-          opacity: 1;
-        }
-      }
-    }
   }
   .task__link, .task__duetime {
     margin-left: 38px;
@@ -63,6 +38,7 @@
             top: 3px;
             bottom: 3px
         };
+
     }
     &:hover {
         background-color: $g_grey--btn-hover;
