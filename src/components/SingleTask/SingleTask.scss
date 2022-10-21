@@ -3,11 +3,22 @@
 .single__wrap {
   width: 100%;
   display: flex;
-  flex-direction: column;
   padding: $padding-all;
   gap: 10px;
+  .single__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  & > svg {
+    cursor: move;
+  }
   &:hover {
     background-color: $g_grey--bg-hover;
+  }
+  &:active {
+    transform: rotate(5deg);
+    transition: 0.2s;
   }
   .single__main {
     display: flex;
@@ -21,27 +32,40 @@
       text-overflow: ellipsis;
       width: calc(100% - calc($check_w-h + 20px));
     }
-
   }
-  .task__link, .task__duetime {
+  .task__link,
+  .task__duetime {
     margin-left: 38px;
     border: 1px solid $g_grey--border-light;
-    color: $g_grey!important;
-    &, a {
-        color: inherit;
-        font-size: small;
-        border-radius: 20px;
-        width: fit-content;
-        padding: {
-            left: 8px;
-            right: 8px;
-            top: 3px;
-            bottom: 3px
-        };
-
+    color: $g_grey !important;
+    &,
+    a {
+      color: inherit;
+      font-size: small;
+      border-radius: 20px;
+      width: fit-content;
+      padding: {
+        left: 8px;
+        right: 8px;
+        top: 3px;
+        bottom: 3px;
+      }
     }
     &:hover {
-        background-color: $g_grey--btn-hover;
+      background-color: $g_grey--btn-hover;
     }
+    
   }
+}
+
+.single__wrap--dragging {
+  opacity: .4;
+  transform: rotate(5deg);
+  transition: 0.2s;
+
+}
+
+.single__wrap--over {
+  filter: blur(1px);
+  transition: 0.2s;
 }

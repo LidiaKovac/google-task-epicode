@@ -12,6 +12,21 @@
       color: $g_blue;
     }
     &:hover {
+            // transition: 0.1;
+            transform: scale(1.4);
+            border: 2px solid transparent;
+            background-color: $g_grey--check-hover;
+      
+            svg {
+              width: calc($check_w-h - 3px);
+              height: calc($check_w-h - 3px);
+              opacity: 1;
+            }
+    }
+  }
+
+  .single__check--active {
+    
       // transition: 0.1;
       transform: scale(1.4);
       border: 2px solid transparent;
@@ -22,5 +37,5 @@
         height: calc($check_w-h - 3px);
         opacity: 1;
       }
-    }
+    
   }

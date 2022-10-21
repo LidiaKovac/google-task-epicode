@@ -5,13 +5,13 @@ import { NewModal } from "../Modals/NewModal/NewModal"
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store"
 export const AllTasks = () => {
-    const tasks = useSelector((state:RootState)=> state.tasks.list)
+    const tasks = useSelector((state: RootState) => state.tasks.list)
     return (<>
         <div className="all__wrap">
-            <AddBtn/>
+            <AddBtn />
             <div className="all__tasks">
                 {
-                    tasks.map(task => <Single task={task}/>)
+                    [...tasks].sort((a, b) => a.order - b.order ).map((task, i) => <Single key={i} task={task} />)
                 }
                 {/* <Single />
                 <Single />
@@ -22,7 +22,7 @@ export const AllTasks = () => {
                 <Single /> */}
 
             </div>
-            <NewModal/>
+            <NewModal />
         </div>
 
     </>)
