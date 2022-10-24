@@ -1,4 +1,11 @@
-.allTasks {
-    display: flex;
-    flex-direction: column;
+@import "../../styles/app.scss";
+.all__wrap {
+    height: 100%;
+    padding-top: $padding-all;
+    .all__tasks {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+    }
 }

@@ -29,21 +29,42 @@ export const Single: FC<ISingleTask> = ({ task }) => {
     }
     const handleDrop = (e: React.DragEvent) => {
         e.stopPropagation()
+        setOver(false)
         let data = JSON.parse(e.dataTransfer.getData("text"))
         dispatch(changeOrder({ id: data.id, order: t.order }))
-        dispatch(changeOrder({ id: t.id, order: data.order }))
-        setOver(false)
+        let target = e.target as HTMLDivElement
+        target.parentElement?.childNodes.forEach((el, i) => {
+            let element = el as HTMLDivElement
+            console.log(element.id, "order:", i);
+            if(data.id !== element.id) dispatch(changeOrder({id: element.id, order: i}))
+        });
+        
+        // dispatch(changeOrder({ id: t.id, order: data.order }))
         setDragging(false)
 
         return false
 
     }
+    const handleDragEnterLeave = (e:React.DragEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+        let target = e.target as HTMLDivElement
+        // let relTarget = e.relatedTarget as HTMLDivElement
+        // let sourceEl, targetEl,currentY
+        // sourceEl = target.getBoundingClientRect()
+        // targetEl = relTarget.getBoundingClientRect()
+        if(e.type === "dragenter") {
+            setOver(true)
+        } else  setOver(false)
+
+    }
     return (
         <div
+        id={task.id}
             onDrop={handleDrop}
-            onDragEnter={(e) => { e.preventDefault(); setOver(true) }}
-            onDragLeave={(e) => { e.preventDefault(); setOver(false) }}
-            onDragOver={(e) => { e.preventDefault() }}
+            onDragEnter={handleDragEnterLeave}
+            onDragLeave={handleDragEnterLeave}
+            onDragOver={(e) => { e.stopPropagation(); e.preventDefault() }}
             onDragStart={handleDrag}
             onDragEnd={handleDrag}
             draggable className={`single__wrap ${isDragging ? "single__wrap--dragging" : isOver ? "single__wrap--over" : ""}`}>
@@ -51,7 +72,7 @@ export const Single: FC<ISingleTask> = ({ task }) => {
 
                 <div className="single__main">
 
-                    <Check task={task} />
+                    <Check isChecked={task.checked!} id={task.id} />
                     <div className="single__task-text">
                         {task.text}
                     </div>

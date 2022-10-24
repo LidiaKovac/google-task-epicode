@@ -14,13 +14,13 @@ export const taskSlice = createSlice({
     reducers: {
 
         addNewTask: (state, action: PayloadAction<Task>) => {
-            state.list.push(action.payload)
+            state.list.push({...action.payload, order: state.list.length})
         },
-        checkTask: (state, action: PayloadAction<string>) => {
+        checkTask: (state, action: PayloadAction<{isChecked: boolean, id: string}>) => {
             if (state.list.length > 0 && state.list[0].checked !== undefined) {
                 state.list.filter((single) => {
-                    return single.id === action.payload
-                })[0].checked = true
+                    return single.id === action.payload.id
+                })[0].checked = action.payload.isChecked
             }
         },
         changeOrder: (state, action: PayloadAction<{ order: number, id: string }>) => {
@@ -28,6 +28,16 @@ export const taskSlice = createSlice({
                 state.list.filter((single) => {
                     return single.id === action.payload.id
                 })[0].order = action.payload.order
+
+                let sorted = state.list.sort((a, b) => a.order - b.order )
+                state.list = sorted
+                // state.list.forEach(single => {
+                //     if((single.order >= action.payload.order) && (single.id !== action.payload.id)) {
+                //         single.order += 1
+                //     }
+                    
+                // })
+
             }
         },
 

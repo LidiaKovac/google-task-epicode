@@ -7,17 +7,18 @@ import uniqid from "uniqid"
 import "./NewModal.scss"
 import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { addNewTask } from "../../../app/reducer/task"
+import moment from "moment"
 export const NewModal = () => {
     const [isSpecial, setSpecial] = useState<boolean>(false)
-    const [task, createTask] = useState<Task>({text: "", attachment:"", checked: false, order: 1} as Task)
+    const [task, createTask] = useState<Task>({ text: "", attachment: "", checked: false, order: 1 } as Task)
     let isOpen = useSelector((state: RootState) => state.modals.list.createNew)
     let dispatch = useDispatch()
-    const handleTask = (event:ChangeEvent<HTMLInputElement>) => {
+    const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
         // if(event.key == "Enter") {
         //     dispatch(addNewTask(task))
         //     createTask({text: "", attachment: ""} as Task)
         // } else 
-        createTask((prev)=> {
+        createTask((prev) => {
             let target = event.target as HTMLInputElement
             return {
                 ...prev,
@@ -27,21 +28,22 @@ export const NewModal = () => {
 
     }
 
-    const sendTask = (ev?:KeyboardEvent) => {
-        if(ev?.key === "Enter") {
+    const sendTask = (ev?: KeyboardEvent) => {
+        if (ev?.key === "Enter") {
 
-            
-            dispatch(addNewTask({...task, id: uniqid()}))
-            createTask({text: "", attachment: "", checked: false, order: task.order+1} as Task)
-        } 
+
+            dispatch(addNewTask({ ...task, id: uniqid() }))
+            createTask({ text: "", attachment: "", checked: false} as Task)
+        }
         if (!ev) {
             dispatch(addNewTask(task))
-            createTask({text: "", attachment: "", checked: false, order: task.order+1} as Task)
+            createTask({ text: "", attachment: "", checked: false} as Task)
         }
     }
 
     const handleDate = (ev: ChangeEvent<HTMLInputElement>) => {
-        createTask(prev => { return { ...prev, due: new Date(ev.target.value!) } })
+        let date = moment(new Date(ev.target.value!)).format("Do-MMM hh:mm")
+        createTask(prev => { return { ...prev, due:  date} })
     }
     return (<>
         {isOpen && <div className="modal__wrap--new">
@@ -51,7 +53,7 @@ export const NewModal = () => {
 
 
                 <div className="modal__task">
-                    <Check task={task} />
+                    <Check isChecked={task.checked!} id={task.id} />
                     <input value={task.text} id='text' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Task" autoFocus />
                     <TbDotsVertical />
                     <TbStar className={isSpecial ? "fill" : ""} onClick={() => setSpecial((prev) => !prev)} />
@@ -60,7 +62,7 @@ export const NewModal = () => {
                     <input value={task.attachment} id='attachment' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Attachment" />
                     <div className="modal__date-time">
 
-                        <input value={task.due?.toDateString()} onBlur={() => sendTask()} onChange={handleDate} type="datetime-local" id='due' />
+                        <input value={task.due} onBlur={() => sendTask()} onChange={handleDate} type="datetime-local" id='due' />
 
 
                     </div>

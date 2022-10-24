@@ -3,16 +3,17 @@ import { AiOutlineCheck } from "react-icons/ai"
 import {useState, useEffect, FC} from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { checkTask } from "../../app/reducer/task"
-import { RootState } from "../../app/store"
-export const Check:FC<{task: Task}> = ({task}) => {
-    const [checked,setChecked] = useState<boolean>(task?.checked || false)
+export const Check:FC<{isChecked: boolean, id:string}> = ({isChecked, id}) => {
+    const [checked,setChecked] = useState<boolean | undefined>(isChecked)
     const dispatch = useDispatch()
-    const prevTask = useSelector((state:RootState)=> state.tasks.list.filter(single => single.id === task.id)[0])
+    const handleCheck = () => {
+        dispatch(checkTask({id, isChecked: checked!}))
+        setChecked(p => !p)
+    }
     useEffect(()=> {
-        if(checked !== prevTask?.checked)  dispatch(checkTask(task?.id))
     }, [checked])
     return (<>
-        <div onClick={()=> setChecked((prev)=> {return !prev})} className={`single__check ${checked && "single__check--active"}`} >
+        <div onClick={handleCheck} className={`single__check ${checked && "single__check--active"}`} >
             <AiOutlineCheck />
         </div> </>)
 }

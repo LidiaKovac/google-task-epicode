@@ -3,8 +3,8 @@
 .single__wrap {
   width: 100%;
   display: flex;
-  padding: $padding-all;
-  gap: 10px;
+  padding: $padding-all * 2;
+  border: 5px solid transparent;
   .single__content {
     display: flex;
     flex-direction: column;
@@ -67,5 +67,6 @@
 
 .single__wrap--over {
   filter: blur(1px);
-  transition: 0.2s;
+  transition: 0.1s;
+  border: 5px dashed grey;
 }

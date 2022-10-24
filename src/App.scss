@@ -1,0 +1,10 @@
+@import "./styles/app.scss";
+
+.body {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  @include center-all
+}

@@ -11,7 +11,7 @@ class TaskState {
 class Task {
     text: string
     attachment?: string
-    due?: Date
+    due?: string
     checked?: boolean
     id: string
     order: number
