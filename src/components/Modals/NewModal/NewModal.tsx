@@ -14,10 +14,7 @@ export const NewModal = () => {
     let isOpen = useSelector((state: RootState) => state.modals.list.createNew)
     let dispatch = useDispatch()
     const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
-        // if(event.key == "Enter") {
-        //     dispatch(addNewTask(task))
-        //     createTask({text: "", attachment: ""} as Task)
-        // } else 
+        
         createTask((prev) => {
             let target = event.target as HTMLInputElement
             return {
@@ -33,22 +30,22 @@ export const NewModal = () => {
 
 
             dispatch(addNewTask({ ...task, id: uniqid() }))
-            createTask({ text: "", attachment: "", checked: false} as Task)
+            createTask({ text: "", attachment: "", checked: false } as Task)
         }
         if (!ev) {
             dispatch(addNewTask(task))
-            createTask({ text: "", attachment: "", checked: false} as Task)
+            createTask({ text: "", attachment: "", checked: false } as Task)
         }
     }
 
     const handleDate = (ev: ChangeEvent<HTMLInputElement>) => {
         let date = moment(new Date(ev.target.value!)).format("Do-MMM hh:mm")
-        createTask(prev => { return { ...prev, due:  date} })
+        createTask(prev => { return { ...prev, due: date } })
     }
     return (<>
-        {isOpen && <div className="modal__wrap--new">
+        {isOpen && (<div className="modal__wrap--new">
 
-            <form>
+           
 
 
 
@@ -68,8 +65,8 @@ export const NewModal = () => {
                     </div>
                 </div>
 
-            </form>
+          
 
-        </div>}
+        </div>)}
     </>)
 }

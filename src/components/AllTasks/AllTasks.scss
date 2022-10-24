@@ -1,11 +1,16 @@
 @import "../../styles/app.scss";
 .all__wrap {
     height: 100%;
-    padding-top: $padding-all;
+    width: 100%;
+    padding: $padding-all;
     .all__tasks {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+    padding: $padding-all;
+    padding-left: $padding-all - 5px; //5px are the border size
+    padding-right: 0px; //5px are the border size
+
         height: 100%;
     }
 }
