@@ -1,11 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import modal from './reducer/modal';
 import task from './reducer/task';
+import dnd from './reducer/dragAndDrop';
+
 
 export const store = configureStore({
   reducer: {
     modals: modal,
-    tasks: task
+    tasks: task,
+    dnd: dnd
   },
 });
 

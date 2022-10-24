@@ -8,6 +8,10 @@ class TaskState {
     list: Task[]
 }
 
+class DnDState {
+    dragging: string
+}
+
 class Task {
     text: string
     attachment?: string

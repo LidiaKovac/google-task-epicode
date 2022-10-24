@@ -68,5 +68,5 @@
 .single__wrap--over {
   filter: blur(1px);
   transition: 0.1s;
-  border: 5px dashed grey;
+  border: 5px dashed $g_grey--border-light;
 }
