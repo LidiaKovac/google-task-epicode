@@ -1,4 +1,3 @@
-import "./SingleTask.scss"
 import { AiOutlineLink } from "react-icons/ai"
 import { MdOutlineDragHandle } from "react-icons/md"
 import { Check } from "../Check/Check"
@@ -14,7 +13,6 @@ interface ISingleTask {
 export const Single: FC<ISingleTask> = ({ task }) => {
     const tasks = useSelector((state: RootState) => state.tasks.list)
     const dragEl = useSelector((state: RootState) => state.dnd.dragging)
-    const loading = useSelector((state: RootState) => state.loading.loading)
     const dispatch = useDispatch()
     const getTaskById = (id: string) => {
         return tasks.filter(single => single._id === id)[0] || false
@@ -93,8 +91,6 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             }
         }
         setDragging(false)
-        return false
-
     }
     const handleDragEnterLeave = (e: React.DragEvent) => {
         e.stopPropagation()
@@ -110,7 +106,10 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             onDrop={handleDrop}
             onDragEnter={handleDragEnterLeave}
             onDragLeave={handleDragEnterLeave}
-            onDragOver={(e) => { e.stopPropagation(); e.preventDefault() }}
+            onDragOver={(e) => {
+                e.stopPropagation();
+                e.preventDefault()
+            }}
             onDragStart={handleDrag}
             onDragEnd={handleDrag}
             draggable className={`single__wrap ${isDragging ? "single__wrap--dragging" : isOver ? "single__wrap--over" : ""}`}>

@@ -2,13 +2,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../../app/store"
 import { Check } from "../../Check/Check"
 import { TbDotsVertical, TbStar } from "react-icons/tb"
-import uniqid from "uniqid"
-
-import "./NewModal.scss"
 import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { addAllTasks } from "../../../app/reducer/task"
 import moment from "moment"
 import { createNewTask } from "../../../app/API"
+
 export const NewModal = () => {
     const [isSpecial, setSpecial] = useState<boolean>(false)
     const tasks = useSelector((state: RootState) => state.tasks.list)
@@ -27,11 +25,11 @@ export const NewModal = () => {
     const sendTask = (ev?: KeyboardEvent) => {
         if (ev?.key === "Enter") {
             createNewTask(task).then(res => dispatch(addAllTasks(res)))
-            createTask({ text: "", attachment: "", checked: false, order: tasks.length } as Task)
+            createTask({ text: "", attachment: "", checked: false, order: tasks.length + 1, due: moment(new Date()).format("Do-MMM hh:mm") } as Task)
         }
         if (!ev) {
             createNewTask(task).then(res => dispatch(addAllTasks(res)))
-            createTask({ text: "", attachment: "", checked: false, order: tasks.length } as Task)
+            createTask({ text: "", attachment: "", checked: false, order: tasks.length + 1, due: moment(new Date()).format("Do-MMM hh:mm") } as Task)
         }
     }
     const handleDate = (ev: ChangeEvent<HTMLInputElement>) => {

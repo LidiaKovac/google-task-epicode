@@ -1,5 +1,9 @@
 @import "./styles/app.scss";
-
+@import "./components/SingleTask/SingleTask.scss";
+@import "./components/AddBtn/AddBtn.scss";
+@import "./components/AllTasks/AllTasks.scss";
+@import "./components/Check/Check.scss";
+@import "./components/Modals/NewModal/NewModal.scss";
 .body {
   width: 400px;
   display: flex;

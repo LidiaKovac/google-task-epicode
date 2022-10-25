@@ -1,4 +1,3 @@
-@import "../../styles/app.scss";
 
 .single__wrap {
   width: 100%;
@@ -9,7 +8,6 @@
     left: 0px;
     right: $padding-all;
   }
-
 
   border: 5px solid transparent;
   .single__content {
@@ -23,7 +21,7 @@
   &:hover {
     background-color: $g_grey--bg-hover;
   }
-  
+
   .single__main {
     display: flex;
     width: 100%;
@@ -58,14 +56,12 @@
     &:hover {
       background-color: $g_grey--btn-hover;
     }
-    
   }
 }
 
 .single__wrap--dragging {
-  opacity: .4;
+  opacity: 0.4;
   transition: 0.2s;
-
 }
 
 .single__wrap--over {

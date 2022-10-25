@@ -1,6 +1,5 @@
 import { Single } from "../SingleTask/SingleTask"
 import { useEffect } from "react"
-import "./AllTasks.scss"
 import { NewModal } from "../Modals/NewModal/NewModal"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../app/store"

@@ -1,4 +1,3 @@
-import "./AddBtn.scss"
 import { MdAddTask } from "react-icons/md"
 import { TbDotsVertical } from "react-icons/tb"
 import { useDispatch } from "react-redux"
