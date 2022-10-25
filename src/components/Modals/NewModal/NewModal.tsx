@@ -14,7 +14,7 @@ export const NewModal = () => {
     let isOpen = useSelector((state: RootState) => state.modals.list.createNew)
     let dispatch = useDispatch()
     const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
-        
+
         createTask((prev) => {
             let target = event.target as HTMLInputElement
             return {
@@ -45,27 +45,27 @@ export const NewModal = () => {
     return (<>
         {isOpen && (<div className="modal__wrap--new">
 
-           
 
 
 
-                <div className="modal__task">
-                    <Check isChecked={task.checked!} id={task.id} />
-                    <input value={task.text} id='text' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Task" autoFocus />
-                    <TbDotsVertical />
-                    <TbStar className={isSpecial ? "fill" : ""} onClick={() => setSpecial((prev) => !prev)} />
+
+            <div className="modal__task">
+                <Check isChecked={task.checked!} id={task.id} />
+                <input value={task.text} id='text' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Task" autoFocus />
+                <TbDotsVertical />
+                <TbStar className={isSpecial ? "fill" : ""} onClick={() => setSpecial((prev) => !prev)} />
+            </div>
+            <div className="modal__details">
+                <input value={task.attachment} id='attachment' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Attachment" />
+                <div className="modal__date-time">
+
+                    <input value={task.due} onBlur={() => sendTask()} onChange={handleDate} type="datetime-local" id='due' />
+
+
                 </div>
-                <div className="modal__details">
-                    <input value={task.attachment} id='attachment' onKeyUp={sendTask} onChange={handleTask} type="text" placeholder="Attachment" />
-                    <div className="modal__date-time">
-
-                        <input value={task.due} onBlur={() => sendTask()} onChange={handleDate} type="datetime-local" id='due' />
+            </div>
 
 
-                    </div>
-                </div>
-
-          
 
         </div>)}
     </>)
