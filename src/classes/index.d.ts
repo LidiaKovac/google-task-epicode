@@ -4,6 +4,10 @@ class ModalState {
 
 }
 
+class loadingState {
+    loading: boolean
+}
+
 class TaskState {
     list: Task[]
 }
@@ -17,7 +21,7 @@ class Task {
     attachment?: string
     due?: string
     checked?: boolean
-    id: string
+    _id: string
     order: number
     constructor(text:string, attachment:string,due:Date, checked:boolean = false, id:string, order: number) {
         this.text = text

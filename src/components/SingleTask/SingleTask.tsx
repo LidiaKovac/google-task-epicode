@@ -2,29 +2,34 @@ import "./SingleTask.scss"
 import { AiOutlineLink } from "react-icons/ai"
 import { MdOutlineDragHandle } from "react-icons/md"
 import { Check } from "../Check/Check"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../app/store"
-import { changeOrder } from "../../app/reducer/task"
+import { addAllTasks, changeOrder } from "../../app/reducer/task"
 import { setDraggingElement } from "../../app/reducer/dragAndDrop"
+import { editTask, getAllTasks } from "../../app/API"
 interface ISingleTask {
     task: Task
 }
 export const Single: FC<ISingleTask> = ({ task }) => {
     const tasks = useSelector((state: RootState) => state.tasks.list)
     const dragEl = useSelector((state: RootState) => state.dnd.dragging)
+    const loading = useSelector((state: RootState) => state.loading.loading)
     const dispatch = useDispatch()
     const getTaskById = (id: string) => {
-        return tasks.filter(single => single.id === id)[0] || false
+        return tasks.filter(single => single._id === id)[0] || false
     }
     const [isDragging, setDragging] = useState(false)
+    useEffect(() => {
+        getAllTasks().then(found => {
+            dispatch(addAllTasks(found))
+        })
+    }, [isDragging])
     const [isOver, setOver] = useState(false)
     const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
         e.stopPropagation()
         setDragging(prev => !prev)
-        dispatch(setDraggingElement(task?.id))
-
-
+        dispatch(setDraggingElement(task?._id))
     }
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.stopPropagation()
@@ -37,14 +42,11 @@ export const Single: FC<ISingleTask> = ({ task }) => {
         let children = target.parentElement?.childNodes
         for (let i = 0; i < children?.length!; i++) {
             const element = children![i]
-
             let el = element as HTMLDivElement
-
-
-            if (el?.id === dropped?.id) {
+            if (el?.id === dropped?._id) {
                 dragElement = el
             }
-            if (el?.id === dragging?.id) {
+            if (el?.id === dragging?._id) {
                 dropElement = el
             }
         }
@@ -55,47 +57,42 @@ export const Single: FC<ISingleTask> = ({ task }) => {
         let follDropI: number = 0
         children?.forEach((el, i) => {
             let element = el as HTMLDivElement
-            if (element?.id === dragging!.id) {
+            if (element?.id === dragging!._id) {
                 follDropI = i + 1
             }
         })
 
-
         let follEl = children![follDropI] as HTMLDivElement
         let foll = getTaskById(follEl?.id)
         if (offset > (dropRect.height / 2)) { //add on top
-            dispatch(changeOrder({ order: dropped.order + 1, id: dragging?.id }))
+            editTask(dragging._id, { order: dropped.order })
+            dispatch(changeOrder({ order: dropped.order + 1, id: dragging?._id }))
             let counter = 1
             for (let i = 0; i < children?.length!; i++) {
                 let curr = children![i] as HTMLDivElement
                 let currTask = getTaskById(curr.id)
-
-                if ((currTask.order >= dropped.order + 1) && currTask.id !== dragging.id && currTask.id !== foll.id) {
+                if ((currTask.order >= dropped.order + 1) && currTask._id !== dragging._id && currTask._id !== foll._id) {
                     counter += 1
+                    editTask(curr.id, { order: dropped.order + counter })
                     dispatch(changeOrder({ order: dropped.order + counter, id: curr.id }))
                 }
             }
         }
         else {
-            dispatch(changeOrder({ order: dropped.order, id: dragging?.id }))
+            editTask(dragging._id, { order: dropped.order })
+            dispatch(changeOrder({ order: dropped.order, id: dragging?._id }))
             let counter = 0
-
             for (let i = 0; i < children?.length!; i++) {
                 let curr = children![i] as HTMLDivElement
                 let currTask = getTaskById(curr.id)
-
-                if (currTask.order >= dropped.order && currTask.id !== dragging.id) {
+                if (currTask.order >= dropped.order && currTask._id !== dragging._id) {
                     counter += 1
+                    editTask(curr.id, { order: dropped.order + counter })
                     dispatch(changeOrder({ order: dropped.order + counter, id: curr.id }))
                 }
             }
-
-
         }
-
-
         setDragging(false)
-
         return false
 
     }
@@ -103,15 +100,13 @@ export const Single: FC<ISingleTask> = ({ task }) => {
         e.stopPropagation()
         e.preventDefault()
 
-
         if (e.type === "dragenter") {
             setOver(true)
         } else setOver(false)
-
     }
     return (
         <div
-            id={task.id}
+            id={task._id}
             onDrop={handleDrop}
             onDragEnter={handleDragEnterLeave}
             onDragLeave={handleDragEnterLeave}
@@ -120,14 +115,11 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             onDragEnd={handleDrag}
             draggable className={`single__wrap ${isDragging ? "single__wrap--dragging" : isOver ? "single__wrap--over" : ""}`}>
             <div className="single__content">
-
                 <div className="single__main">
-
-                    <Check isChecked={task.checked!} id={task.id} />
+                    <Check isChecked={task.checked!} id={task._id} />
                     <div className="single__task-text">
-                        {task.text}, {task.order}
+                        {task.text}
                     </div>
-
                 </div>
                 {task.attachment?.length! > 0 && (<div className="task__link">
                     <a href={task.attachment}>
@@ -140,7 +132,5 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             </div>
             <MdOutlineDragHandle />
         </div>
-
-
     )
 }
