@@ -1,7 +1,8 @@
 import { AiOutlineLink } from "react-icons/ai"
 import { MdOutlineDragHandle } from "react-icons/md"
+import moment from "moment"
 import { Check } from "../Check/Check"
-import { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../app/store"
 import { addAllTasks, changeOrder } from "../../app/reducer/task"
@@ -11,19 +12,36 @@ interface ISingleTask {
     task: Task
 }
 export const Single: FC<ISingleTask> = ({ task }) => {
-    const tasks = useSelector((state: RootState) => state.tasks.list)
-    const dragEl = useSelector((state: RootState) => state.dnd.dragging)
     const dispatch = useDispatch()
-    const getTaskById = (id: string) => {
-        return tasks.filter(single => single._id === id)[0] || false
-    }
+
+    const tasks = useSelector((state: RootState) => state.tasks.byDate)
+    const dragEl = useSelector((state: RootState) => state.dnd.dragging)
+
+    const [edited, setEdited] = useState("")
+    const [isOver, setOver] = useState(false)
+    const [isDisabled, setDisabled] = useState(true)
     const [isDragging, setDragging] = useState(false)
+
     useEffect(() => {
-        getAllTasks().then(found => {
+        isDragging === false && getAllTasks().then(found => {
             dispatch(addAllTasks(found))
         })
     }, [isDragging])
-    const [isOver, setOver] = useState(false)
+
+    const getTaskById = (id: string) => {
+        let found = {} as Task
+        for (const key in tasks) {
+            if (Object.prototype.hasOwnProperty.call(tasks, key)) {
+                const date = tasks[key];
+                let foundIndex = date.findIndex(task => task._id === id)
+                if (foundIndex !== -1) {
+                    found = date[foundIndex]
+                    break
+                }
+            }
+        }
+        return found
+    }
     const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
         e.stopPropagation()
         setDragging(prev => !prev)
@@ -63,7 +81,7 @@ export const Single: FC<ISingleTask> = ({ task }) => {
         let follEl = children![follDropI] as HTMLDivElement
         let foll = getTaskById(follEl?.id)
         if (offset > (dropRect.height / 2)) { //add on top
-            editTask(dragging._id, { order: dropped.order })
+            editTask(dragging._id, { order: dropped.order + 1 })
             dispatch(changeOrder({ order: dropped.order + 1, id: dragging?._id }))
             let counter = 1
             for (let i = 0; i < children?.length!; i++) {
@@ -92,6 +110,18 @@ export const Single: FC<ISingleTask> = ({ task }) => {
         }
         setDragging(false)
     }
+    const handleEdit = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+        ev.stopPropagation()
+        let target = ev.target as HTMLInputElement
+        setEdited(target.value)
+        if (ev.key === "Enter") {
+            editTask(task._id, { ...task, text: target.value }).then((res)=> {
+                setDisabled(true)
+                setEdited("")
+                dispatch(addAllTasks(res))
+            })
+        }
+    }
     const handleDragEnterLeave = (e: React.DragEvent) => {
         e.stopPropagation()
         e.preventDefault()
@@ -100,6 +130,12 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             setOver(true)
         } else setOver(false)
     }
+
+
+
+
+
+
     return (
         <div
             id={task._id}
@@ -112,21 +148,22 @@ export const Single: FC<ISingleTask> = ({ task }) => {
             }}
             onDragStart={handleDrag}
             onDragEnd={handleDrag}
-            draggable className={`single__wrap ${isDragging ? "single__wrap--dragging" : isOver ? "single__wrap--over" : ""}`}>
+            draggable className={`single__wrap ${isDragging ? "single__wrap--dragging" : isOver ? "single__wrap--over" : ""} ${task.checked ? "task--checked" : ""}`}>
             <div className="single__content">
-                <div className="single__main">
+                <div className="single__main" >
                     <Check isChecked={task.checked!} id={task._id} />
-                    <div className="single__task-text">
-                        {task.text}
-                    </div>
+                    {isDisabled ? <div onClick={() => setDisabled(false)}> {task.text} </div> :
+                        <input onBlur={() => { setDisabled(true); editTask(task._id, { text: edited }) }} onKeyUp={handleEdit} defaultValue={task.text} className="single__task-text" disabled={isDisabled} />
+                    }
+
                 </div>
                 {task.attachment?.length! > 0 && (<div className="task__link">
                     <a href={task.attachment}>
                         <AiOutlineLink /> Click me to go to an attachment
                     </a>
                 </div>)}
-                {task.due && <div className="task__duetime">
-                    {task.due?.toString()}
+                {task.due && <div className={`${task.isExpired ? "task__date--expired" : ""} task__duetime `}>
+                    {moment(task.due).format("DD/MM") || ""}
                 </div>}
             </div>
             <MdOutlineDragHandle />

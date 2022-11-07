@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: DnDState = {
-    dragging: ""
+    dragging: "",
+    isDragging: null
 };
 
 export const dNdSlice = createSlice({
@@ -10,10 +11,13 @@ export const dNdSlice = createSlice({
     reducers: {
         setDraggingElement: (state, action: PayloadAction<string>) => {
             state.dragging = action.payload
+        },
+        setIsDragging: (state, action: PayloadAction<boolean>) => {
+            state.isDragging = action.payload
         }
     },
 });
 
-export const { setDraggingElement } = dNdSlice.actions;
+export const { setDraggingElement, setIsDragging } = dNdSlice.actions;
 
 export default dNdSlice.reducer;

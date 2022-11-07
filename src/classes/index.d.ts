@@ -9,11 +9,16 @@ class loadingState {
 }
 
 class TaskState {
-    list: Task[]
+    byDate: {
+        [field:string]: Task[]
+    }
+    count: number
+    foundById?: Task
 }
 
 class DnDState {
     dragging: string
+    isDragging: boolean | null
 }
 
 class Task {
@@ -23,6 +28,7 @@ class Task {
     checked?: boolean
     _id: string
     order: number
+    isExpired: boolean
     constructor(text:string, attachment:string,due:Date, checked:boolean = false, id:string, order: number) {
         this.text = text
         this.attachment = attachment
